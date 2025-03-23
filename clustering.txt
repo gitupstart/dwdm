@@ -1,0 +1,31 @@
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+
+# Load the dataset
+data = pd.read_csv('ipl_2024_deliveries_classified.csv')
+
+# Encode categorical columns
+encoder = LabelEncoder()
+for col in ['batting_team', 'bowling_team', 'venue']:
+    data[col] = encoder.fit_transform(data[col])
+
+# Select features for clustering
+
+
+X = data[['total_runs', 'innings']]
+
+# Apply K-Means clustering
+kmeans = KMeans(n_clusters=3, random_state=42)
+data['Cluster'] = kmeans.fit_predict(X)
+
+# Save the clustered data
+data.to_csv('clustered_data.csv', index=False)
+
+# Visualize the clusters
+plt.scatter(data['total_runs'], data['innings'], c=data['Cluster'], cmap='viridis')
+plt.xlabel('Total Runs')
+plt.ylabel('Innings')
+plt.title('K-Means Clustering on IPL Data')
+plt.show()

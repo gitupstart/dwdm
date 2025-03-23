@@ -1,0 +1,51 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier, export_text
+from sklearn.preprocessing import LabelEncoder
+from sklearn import tree
+
+# Load dataset
+file_path = "C://Users/kritt/Downloads/dwdm lab1/final_5000.csv"
+df = pd.read_csv(file_path)
+
+
+# Define feature columns (excluding categorical columns like Country & City)
+features = ["Temperature", "Humidity", "PM2.5", "PM10", "NO2", "SO2", "CO", 
+            "Proximity_to_Industrial_Areas", "Population_Density", "AQI Value"]
+target = "AQI Category"
+
+
+# Encode categorical target variable (AQI Category)
+label_encoder = LabelEncoder()
+df[target] = label_encoder.fit_transform(df[target])
+
+# Split dataset into training and testing sets (80% train, 20% test)
+X_train, X_test, y_train, y_test = train_test_split(df[features], df[target], test_size=0.2, random_state=42)
+
+# Train Decision Tree Classifier
+clf = DecisionTreeClassifier(criterion="entropy", max_depth=5, random_state=42)
+clf.fit(X_train, y_train)
+
+
+# 🔹 *Save and Display Decision Tree using Matplotlib*
+plt.figure(figsize=(20, 12))
+tree.plot_tree(
+    clf, 
+    feature_names=features, 
+    class_names=label_encoder.classes_,
+    filled=True, 
+    rounded=True,   
+    fontsize=10,
+    proportion=True  # Scales nodes based on data proportion
+)
+plt.title("Decision Tree for Air Pollution Classification", fontsize=14)
+
+# Save the tree as a PNG file
+png_path = "C://Users/kritt/Downloads/dwdm lab1/air_pollution_decision_tree.png"
+plt.savefig(png_path, format="png", dpi=300, bbox_inches="tight")  # High-resolution PNG
+plt.show()
+
+# Print confirmation message
+print(f"\nDecision Tree saved as '{png_path}'")

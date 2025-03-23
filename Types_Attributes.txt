@@ -1,0 +1,29 @@
+import pandas as pd
+
+# Load the dataset
+file_path = "C://Users/kritt/Downloads/dwdm lab1/final_5000.csv"
+df = pd.read_csv(file_path)
+
+# Identify numeric attributes (integer or float types)
+numeric_attributes = df.select_dtypes(include=['int64', 'float64']).columns.tolist()
+
+# Identify nominal attributes (categorical attributes)
+nominal_attributes = df.select_dtypes(include=['object']).columns.tolist()
+
+# Define ordinal attributes manually (these are categorical but have an inherent order)
+# Example: AQI categories often follow an order (Good < Moderate < Unhealthy, etc.)
+# Modify this list based on the dataset
+ordinal_attributes = ["AQI Category"] if "AQI Category" in df.columns else []
+
+# Remove ordinal attributes from nominal attributes list
+nominal_attributes = [col for col in nominal_attributes if col not in ordinal_attributes]
+
+# Print results
+print("Numeric Attributes:")
+print("\n".join(numeric_attributes))
+
+print("\nNominal Attributes:")
+print("\n".join(nominal_attributes))
+
+print("\nOrdinal Attributes:")
+print("\n".join(ordinal_attributes))

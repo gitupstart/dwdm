@@ -1,0 +1,39 @@
+import pandas as pd
+
+# Load datasets
+df1 = pd.read_csv("dataset1.csv")
+df2 = pd.read_csv("dataset2.csv")
+
+# Display column names to identify attributes
+print("Dataset 1 Columns:", df1.columns)
+print("Dataset 2 Columns:", df2.columns)
+
+# Define attribute mapping for standardization
+attribute_mapping = {
+    "full_name": "name",
+    "dob": "date_of_birth",
+    "mobile": "contact_number",
+    "email_address": "email",
+    "residence": "address",
+    "job": "occupation",
+    "salary": "income",
+    "zip_code": "postal_code",
+    "state_name": "state",
+    "country_of_residence": "country"
+}
+
+# Rename columns in each dataset based on the mapping
+df1.rename(columns=attribute_mapping, inplace=True)
+df2.rename(columns=attribute_mapping, inplace=True)
+
+# Ensure both datasets have the same attributes
+common_columns = set(df1.columns) & set(df2.columns)
+df1 = df1[list(common_columns)]
+df2 = df2[list(common_columns)]
+
+# Merge the datasets
+merged_df = pd.concat([df1, df2], ignore_index=True)
+
+# Save the cleaned dataset
+merged_df.to_csv("merged_dataset.csv", index=False)
+print("Dataset merged successfully and saved as merged_dataset.csv.")
