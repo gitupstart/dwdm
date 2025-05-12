@@ -1,0 +1,19 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from scipy.cluster.hierarchy import dendrogram, linkage
+
+# Read the CSV file
+df = pd.read_csv("your_file.csv")  # Replace with your CSV file path
+
+# Use 'age' column
+age = df[['age']]
+
+# Create linkage matrix
+Z = linkage(age, method='ward')
+
+# Plot dendrogram
+dendrogram(Z)
+plt.title("Dendrogram - age")
+plt.xlabel("Samples")
+plt.ylabel("Distance")
+plt.show()
